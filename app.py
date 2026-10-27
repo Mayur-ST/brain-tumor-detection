@@ -525,6 +525,10 @@ from datetime import datetime
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
     page_title="AI Brain Tumor Diagnostic System",
+            # --- MAIN HEADER ---
+st.markdown("### 🧠 Advanced Brain Tumor AI Diagnostic System")
+st.markdown("##### *(Minor Project)*")
+st.write("### Upload Brain MRI Scan...")
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="expanded"
