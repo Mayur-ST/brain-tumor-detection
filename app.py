@@ -143,6 +143,48 @@
 
 # for run the  application type :-  & "C:\Users\Mayur Nandurkar\AppData\Local\Programs\Python\Python313\python.exe" -m streamlit run "c:/Users/Mayur Nandurkar/OneDrive/Desktop/ml project/app.py"
 
+import os
+import streamlit as st
+import tensorflow as tf
+import numpy as np
+from PIL import Image
+import cv2
+import matplotlib.pyplot as plt
+import io
+import gdown
+from tensorflow.keras.applications.vgg16 import preprocess_input
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
+
+# Page Configuration
+st.set_page_config(page_title="AI Brain Tumor Diagnostic System", page_icon="🧠", layout="wide")
+
+# Google Drive File ID ( file ID )
+FILE_ID = '1mnX7MphjXdFESxOgNBRNXd3u8RQ9qSaB'
+MODEL_PATH = 'brain_tumor_vgg16.keras'
+
+# Model Automatic Download & Loading with Caching
+@st.cache_resource
+def load_model():
+    if not os.path.exists(MODEL_PATH):
+        with st.spinner("Downloading model from Google Drive (First time setup)... Please wait."):
+            url = f'https://drive.google.com/uc?id={FILE_ID}'
+            gdown.download(url, MODEL_PATH, quiet=False)
+            
+    model = tf.keras.models.load_model(
+        MODEL_PATH, 
+        custom_objects={'preprocess_input': preprocess_input}
+    )
+    return model
+
+with st.spinner("Initializing Diagnostic System..."):
+    model = load_model()
+
+
+#-------------------------------------------------------------------------------------------------------------------
+
 
 import streamlit as st
 import tensorflow as tf
