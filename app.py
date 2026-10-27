@@ -525,10 +525,7 @@ from datetime import datetime
 # --- PAGE CONFIGURATION ---
 st.set_page_config(
     page_title="AI Brain Tumor Diagnostic System",
-            # --- MAIN HEADER ---
-st.markdown("### 🧠 Advanced Brain Tumor AI Diagnostic System")
-st.markdown("##### *(Minor Project)*")
-st.write("### Upload Brain MRI Scan...")
+           
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -563,11 +560,17 @@ hospital_name = st.sidebar.text_input("Hospital / Clinic", "GCOEA Medical Center
 st.sidebar.markdown("---")
 st.sidebar.markdown("Upload a brain MRI scan (JPG/PNG) to execute deep learning classification, Grad-CAM attention mapping, and clinical reporting.")
 
+# # --- MAIN HEADER ---
+# st.title("🧠 Advanced Brain Tumor AI Diagnostic & Clinical System (Minor Project)")
+# st.write("### Upload Brain MRI Scan...")
 # --- MAIN HEADER ---
-st.title("🧠 Advanced Brain Tumor AI Diagnostic & Clinical System (Minor Project)")
+st.markdown("### 🧠 Advanced Brain Tumor AI Diagnostic System")
+st.markdown("##### *(Minor Project)*")
 st.write("### Upload Brain MRI Scan...")
 
 uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png"])
+
+
 
 def generate_gradcam(img_array):
     heatmap = np.uint8(255 * np.random.rand(224, 224, 3))
