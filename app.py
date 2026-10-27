@@ -564,7 +564,7 @@ st.sidebar.markdown("Upload a brain MRI scan (JPG/PNG) to execute deep learning 
 # st.title("🧠 Advanced Brain Tumor AI Diagnostic & Clinical System (Minor Project)")
 # st.write("### Upload Brain MRI Scan...")
 # --- MAIN HEADER ---
-st.markdown("### 🧠 Advanced Brain Tumor AI Diagnostic System")
+st.markdown("# 🧠 Advanced Brain Tumor AI Diagnostic System")
 st.markdown("##### *(Minor Project)*")
 st.write("### Upload Brain MRI Scan...")
 
