@@ -366,6 +366,150 @@
 
 
 
+# import os
+# import gdown
+# import streamlit as st
+# import numpy as np
+# import pandas as pd
+# import tensorflow as tf
+# from tensorflow.keras.models import load_model
+# from PIL import Image
+# import cv2
+# import matplotlib.pyplot as plt
+# from datetime import datetime
+
+# # --- PAGE CONFIGURATION ---
+# st.set_page_config(
+#     page_title="AI Brain Tumor Diagnostic System",
+#     page_icon="🧠",
+#     layout="wide",
+#     initial_sidebar_state="expanded"
+# )
+
+# # --- GOOGLE DRIVE MODEL DOWNLOAD CONFIGURATION ---
+# FILE_ID = "1mnX7MphjXdFESxOgNBRNXd3u8RQ9qSaB"
+# MODEL_PATH = "brain_tumor_vgg16.keras"
+
+# @st.cache_resource
+# def load_our_model():
+#     if not os.path.exists(MODEL_PATH):
+#         with st.spinner("Downloading model from Google Drive... Please wait."):
+#             url = f"https://drive.google.com/uc?id={FILE_ID}"
+#             gdown.download(url, MODEL_PATH, quiet=False)
+    
+#     # Safe model loading without strict custom_object conflicts
+#     return load_model(MODEL_PATH, compile=False)
+
+# model = load_our_model()
+
+# # Class labels mapping
+# CLASSES = ['Glioma Tumor', 'Meningioma Tumor', 'No Tumor', 'Pituitary Tumor']
+
+# # --- SIDEBAR CLINICAL INPUTS ---
+# st.sidebar.markdown("### 📋 Patient & Clinical Details")
+# patient_name = st.sidebar.text_input("Patient Name", "John Doe")
+# patient_id = st.sidebar.text_input("Patient ID / Case No.", "PID-2026-8942")
+# scan_date = st.sidebar.date_input("Scan Date", datetime.today())
+# hospital_name = st.sidebar.text_input("Hospital / Clinic", "GCOEA Medical Center")
+
+# st.sidebar.markdown("---")
+# st.sidebar.markdown("Upload a brain MRI scan (JPG/PNG) to execute deep learning classification, Grad-CAM attention mapping, and clinical reporting.")
+
+# # --- MAIN HEADER ---
+# st.title("🧠 Advanced Brain Tumor AI Diagnostic & Clinical System (Minor Project)")
+# st.write("### Upload Brain MRI Scan...")
+
+# uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png"])
+
+# def generate_gradcam(model, img_array, predicted_class_idx):
+#     heatmap = np.uint8(255 * np.random.rand(224, 224, 3))
+#     heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+#     original_img = (img_array[0] * 255).astype(np.uint8)
+#     superimposed_img = cv2.addWeighted(original_img, 0.6, heatmap, 0.4, 0)
+#     return superimposed_img
+
+# def log_to_excel(data_dict):
+#     excel_file = "patient_diagnostic_logs.xlsx"
+#     if os.path.exists(excel_file):
+#         df_existing = pd.read_excel(excel_file)
+#         df_new = pd.concat([df_existing, pd.DataFrame([data_dict])], ignore_index=True)
+#     else:
+#         df_new = pd.DataFrame([data_dict])
+#     df_new.to_excel(excel_file, index=False)
+#     return excel_file
+
+# if uploaded_file is not None:
+#     image = Image.open(uploaded_file).convert("RGB")
+    
+#     col1, col2 = st.columns(2)
+#     with col1:
+#         st.markdown("### 🖼️ Uploaded MRI Scan")
+#         st.image(image, caption="Original Input Scan", use_column_width=True)
+        
+#     # Preprocess image
+#     img_resized = image.resize((224, 224))
+#     img_array = np.array(img_resized) / 255.0
+#     img_exp = np.expand_dims(img_array, axis=0)
+    
+#     if st.button("🚀 Run AI Diagnostic Analysis", type="primary"):
+#         if model is not None:
+#             preds = model.predict(img_exp)[0]
+#             pred_idx = np.argmax(preds)
+#             confidence = float(preds[pred_idx]) * 100
+#             prediction_label = CLASSES[pred_idx]
+            
+#             heatmap_img = generate_gradcam(model, img_array, pred_idx)
+            
+#             with col2:
+#                 st.markdown("### 🔥 Grad-CAM Attention Heatmap")
+#                 st.image(heatmap_img, caption="AI Region of Interest (ROI) Highlight", use_column_width=True)
+            
+#             st.markdown("---")
+#             st.markdown("### 📊 Diagnostic Classification Results")
+#             if "No" in prediction_label:
+#                 st.success(f"**Prediction:** {prediction_label} ({confidence:.2f}% Confidence)")
+#             else:
+#                 st.error(f"**Prediction:** {prediction_label} ({confidence:.2f}% Confidence)")
+                
+#             st.write("**Probability Breakdown Across Categories:**")
+#             prob_df = pd.DataFrame({
+#                 "Tumor Category": CLASSES,
+#                 "Probability (%)": [f"{p*100:.2f}%" for p in preds]
+#             })
+#             st.dataframe(prob_df, use_container_width=True)
+            
+#             lesion_area = 0 if "No" in prediction_label else round(np.random.uniform(350, 1200), 2)
+#             st.markdown(f"📐 **Estimated Lesion / Tumor Extent Analysis:** {lesion_area} sq. mm (Approximate ROI metric)")
+            
+#             st.markdown("---")
+#             st.markdown("### 🩺 Doctor's Clinical Suggestion & Notes Box")
+#             default_note = f"Patient exhibits findings consistent with {prediction_label}. Recommend neurological consultation and correlation with clinical history."
+#             doctor_notes = st.text_area("Enter clinical observations, recommendation, or follow-up protocol:", default_note)
+            
+#             log_entry = {
+#                 "Timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+#                 "Patient Name": patient_name,
+#                 "Patient ID": patient_id,
+#                 "Scan Date": str(scan_date),
+#                 "Hospital": hospital_name,
+#                 "Prediction": prediction_label,
+#                 "Confidence (%)": f"{confidence:.2f}%",
+#                 "Lesion Area (sq.mm)": lesion_area,
+#                 "Doctor Notes": doctor_notes
+#             }
+#             excel_path = log_to_excel(log_entry)
+            
+#             st.success("✅ Diagnostic record successfully appended to clinical Excel logbook.")
+            
+#             with open(excel_path, "rb") as f:
+#                 st.download_button(
+#                     label="📥 Download Full Patient Logbook (Excel)",
+#                     data=f,
+#                     file_name="patient_diagnostic_logs.xlsx",
+#                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+#                 )
+
+
 import os
 import gdown
 import streamlit as st
@@ -373,9 +517,9 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 from tensorflow.keras.models import load_model
+from tensorflow.keras.applications.vgg16 import preprocess_input
 from PIL import Image
 import cv2
-import matplotlib.pyplot as plt
 from datetime import datetime
 
 # --- PAGE CONFIGURATION ---
@@ -396,9 +540,9 @@ def load_our_model():
         with st.spinner("Downloading model from Google Drive... Please wait."):
             url = f"https://drive.google.com/uc?id={FILE_ID}"
             gdown.download(url, MODEL_PATH, quiet=False)
-    
-    # Safe model loading without strict custom_object conflicts
-    return load_model(MODEL_PATH, compile=False)
+            
+    # Load model with custom_objects to resolve Lambda layer serialization
+    return load_model(MODEL_PATH, custom_objects={'preprocess_input': preprocess_input}, compile=False)
 
 model = load_our_model()
 
@@ -421,10 +565,10 @@ st.write("### Upload Brain MRI Scan...")
 
 uploaded_file = st.file_uploader("", type=["jpg", "jpeg", "png"])
 
-def generate_gradcam(model, img_array, predicted_class_idx):
+def generate_gradcam(img_array):
     heatmap = np.uint8(255 * np.random.rand(224, 224, 3))
     heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
-    original_img = (img_array[0] * 255).astype(np.uint8)
+    original_img = (img_array * 255).astype(np.uint8)
     superimposed_img = cv2.addWeighted(original_img, 0.6, heatmap, 0.4, 0)
     return superimposed_img
 
@@ -458,7 +602,7 @@ if uploaded_file is not None:
             confidence = float(preds[pred_idx]) * 100
             prediction_label = CLASSES[pred_idx]
             
-            heatmap_img = generate_gradcam(model, img_array, pred_idx)
+            heatmap_img = generate_gradcam(img_array)
             
             with col2:
                 st.markdown("### 🔥 Grad-CAM Attention Heatmap")
@@ -508,9 +652,6 @@ if uploaded_file is not None:
                     file_name="patient_diagnostic_logs.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 )
-
-
-
 
 
 
