@@ -680,7 +680,7 @@ st.set_page_config(
 )
 
 # 2. Google Drive Model Loader (Cloud Deployment Setup)
-FILE_ID = 'YAHAN_APNI_GOOGLE_DRIVE_FILE_ID_DAALO'  # <-- Yahan apni Google Drive File ID daalna
+FILE_ID = '1mnX7MphjXdFESxOgNBRNXd3u8RQ9qSaB'  # <-- Yahan apni Google Drive File ID daalna
 MODEL_PATH = 'brain_tumor_vgg16.keras'
 
 @st.cache_resource
@@ -742,7 +742,7 @@ with st.sidebar:
     - **Evaluation Metrics:** Categorical Cross-Entropy, Softmax Probability, Grad-CAM Attention Mapping.
     """)
     st.markdown("---")
-    st.info("💡 **Team Members:**\n- Mayur Nandurkar (23002035)\n- Sanket S. Suryakar (24106003)\n- Atharv Thakare (24106005)\n\n**Guide:** Dr. Kishor Tayade[cite: 1, 2]")
+    st.info("💡 **Team Members:**\n- Mayur Nandurkar (23002035)\n- Sanket S. Suryakar (24106003)\n- Atharv Thakare (24106005) \n- pranik gulhane (23002042)\n\n**Guide:** Dr. Kishor Tayade[cite: 1, 2]")
 
 # Input Selection Method
 input_method = st.radio(
