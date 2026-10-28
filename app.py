@@ -724,7 +724,7 @@ with st.spinner("Initializing Deep Learning Inference Engine..."):
 
 # Header & Metadata
 st.title("🧠 Brain Tumor Classification from MRI Scans Using Deep Learning")
-st.markdown("####### Department of Information Technology | Government College of Engineering, Amravati (GCOEA)")
+st.markdown(" Department of Information Technology | Government College of Engineering, Amravati (GCOEA)"\n-"Department of Information Technology")
 
 # st.markdown("# 🧠 Advanced Brain Tumor AI Diagnostic System")
 st.markdown("##### *(Minor Project)*")
