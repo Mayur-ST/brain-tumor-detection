@@ -736,7 +736,7 @@ st.markdown("---")
 with st.sidebar:
     st.header("🧬 Model & Architecture Specs")
     st.markdown("""
-    - **Base Architecture:** VGG16 (Transfer Learning)[cite: 29]
+    - **Base Architecture:** VGG16 (Transfer Learning)
     - **Input Tensor Shape:** `224 × 224 × 3` RGB
     - **Dataset Source:** Kaggle Brain Tumor MRI Dataset
     - **Target Classes:** 
@@ -747,7 +747,7 @@ with st.sidebar:
     - **Evaluation Metrics:** Categorical Cross-Entropy, Softmax Probability, Grad-CAM Attention Mapping.
     """)
     st.markdown("---")
-    st.info("💡 **Team Members:**\n- Mayur Nandurkar (23002035)\n- Sanket S. Suryakar (24106003)\n- Atharv Thakare (24106005) \n- pranik gulhane (23002042)\n\n**Guide:** Dr. Kishor Tayade[cite: 1, 2]")
+    st.info("💡 **Team Members:**\n- Mayur Nandurkar (23002035)\n- Sanket S. Suryakar (24106003)\n- Atharv Thakare (24106005) \n- Pranik Gulhane (23002042)\n\n**Guide:** Dr. B. V. Wakode ")
 
 # Input Selection Method
 input_method = st.radio(
